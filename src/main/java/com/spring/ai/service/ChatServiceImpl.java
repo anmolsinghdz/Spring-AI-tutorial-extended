@@ -103,21 +103,34 @@ public class ChatServiceImpl implements ChatService{
          */
 
 
-        SystemPromptTemplate systemPromptTemplate = SystemPromptTemplate.builder()
-                .template("You are a helpful coding assistant. You are an expert in coding")
-                .build();
-        Message systemMessage = systemPromptTemplate.createMessage();
+        //role based prompting
+//        SystemPromptTemplate systemPromptTemplate = SystemPromptTemplate.builder()
+//                .template("You are a helpful coding assistant. You are an expert in coding")
+//                .build();
+//        Message systemMessage = systemPromptTemplate.createMessage();
+//
+//        PromptTemplate userPromptTemplate = PromptTemplate.builder()
+//                .template("Tell me about {techName}? Explain using example {exampleName}")
+//                .build();
+//        Message userMessage = userPromptTemplate.createMessage(
+//                Map.of("techName", "Spring", "exampleName", "Spring Boot"));
+//
+//        Prompt prompt = new Prompt(List.of(systemMessage, userMessage));
+//
+//        String response = chatClient
+//                .prompt(prompt)
+//                .call()
+//                .content();
 
-        PromptTemplate userPromptTemplate = PromptTemplate.builder()
-                .template("Tell me about {techName}? Explain using example {exampleName}")
-                .build();
-        Message userMessage = userPromptTemplate.createMessage(
-                Map.of("techName", "Spring", "exampleName", "Spring Boot"));
 
-        Prompt prompt = new Prompt(List.of(systemMessage, userMessage));
-
+        //fluent api prompting
         String response = chatClient
-                .prompt(prompt)
+                .prompt()
+                .system(system->
+                        system.text("You are a helpful coding assistant. You are an expert in coding"))
+                .user(user->
+                        user.text("Tell me about {techName}? Explain using example {exampleName}")
+                        .params(Map.of("techName","Spring","exampleName","Spring Boot")))
                 .call()
                 .content();
         return response;
