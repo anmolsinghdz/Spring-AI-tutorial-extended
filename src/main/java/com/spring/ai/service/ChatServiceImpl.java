@@ -8,7 +8,9 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.google.genai.GoogleGenAiChatOptions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +20,12 @@ import java.util.Map;
 public class ChatServiceImpl implements ChatService{
 
     private ChatClient chatClient;
+
+    @Value("classpath:/prompts/user-message.st")
+    private Resource userMessage;
+
+    @Value("classpath:/prompts/system-message.st")
+    private Resource systemMessage;
 
     public  ChatServiceImpl(ChatClient.Builder builder) {
         this.chatClient = builder.build();
@@ -124,13 +132,24 @@ public class ChatServiceImpl implements ChatService{
 
 
         //fluent api prompting
+//        String response = chatClient
+//                .prompt()
+//                .system(system->
+//                        system.text("You are a helpful coding assistant. You are an expert in coding"))
+//                .user(user->
+//                        user.text("Tell me about {techName}? Explain using example {exampleName}")
+//                        .params(Map.of("techName","Spring","exampleName","Spring Boot")))
+//                .call()
+//                .content();
+
+
+        //reading prompt from external resource
         String response = chatClient
                 .prompt()
                 .system(system->
-                        system.text("You are a helpful coding assistant. You are an expert in coding"))
+                        system.text(systemMessage))
                 .user(user->
-                        user.text("Tell me about {techName}? Explain using example {exampleName}")
-                        .params(Map.of("techName","Spring","exampleName","Spring Boot")))
+                        user.text(userMessage).param("concept","Spring Boot"))
                 .call()
                 .content();
         return response;

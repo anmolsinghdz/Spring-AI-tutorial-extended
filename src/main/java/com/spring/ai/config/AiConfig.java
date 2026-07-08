@@ -25,9 +25,7 @@ public class AiConfig {
 //    @Bean
 //    public ChatClient chatClient(ChatClient.Builder builder) {
 //        return builder
-//                .defaultSystem("You are a helpful coding assistant. You are an expert in coding")
 //                .defaultOptions(GoogleGenAiChatOptions.builder()
-//                        .model(GEMINI_2_5_FLASH)
 //                        .temperature(0.7)
 //                        .maxOutputTokens(100))
 //                .build();
