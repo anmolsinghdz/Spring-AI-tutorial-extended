@@ -27,8 +27,8 @@ public class ChatServiceImpl implements ChatService{
     @Value("classpath:/prompts/system-message.st")
     private Resource systemMessage;
 
-    public  ChatServiceImpl(ChatClient.Builder builder) {
-        this.chatClient = builder.build();
+    public  ChatServiceImpl(ChatClient chatClient) {
+        this.chatClient = chatClient;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class ChatServiceImpl implements ChatService{
         return "response";
     }
 
-    public String chatTemplate(){
+    public String chatTemplate(String q){
 
         /*
         //prompt template
@@ -144,14 +144,24 @@ public class ChatServiceImpl implements ChatService{
 
 
         //reading prompt from external resource
+//        String response = chatClient
+//                .prompt()
+//                .system(system->
+//                        system.text(systemMessage))
+//                .user(user->
+//                        user.text(userMessage).param("concept","Spring Boot"))
+//                .call()
+//                .content();
+
         String response = chatClient
                 .prompt()
-                .system(system->
+                .system(system ->
                         system.text(systemMessage))
-                .user(user->
-                        user.text(userMessage).param("concept","Spring Boot"))
+                .user(user ->
+                        user.text(userMessage).param("concept", q))
                 .call()
                 .content();
+
         return response;
     }
 }

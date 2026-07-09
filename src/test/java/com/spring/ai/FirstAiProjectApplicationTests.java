@@ -19,7 +19,7 @@ class FirstAiProjectApplicationTests {
 	void TestTemplateRender(){
 		System.out.println("template renderer");
 
-		String output = this.chatService.chatTemplate();
+		String output = this.chatService.chatTemplate("json");
 
 		System.out.println(output);
 	}
