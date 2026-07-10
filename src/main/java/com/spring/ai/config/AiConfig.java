@@ -1,5 +1,6 @@
 package com.spring.ai.config;
 
+import com.spring.ai.advisors.TokenPrintAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -31,11 +32,11 @@ public class AiConfig {
         GoogleGenAiChatOptions.Builder chatOptionsBuilder = GoogleGenAiChatOptions.builder()
                 .temperature(0.3)
                 .topP(0.9)
-                .maxOutputTokens(1000);
+                .maxTokens(200);
 
 
         return builder
-                .defaultAdvisors(new SimpleLoggerAdvisor(), new SafeGuardAdvisor(List.of("games")))
+                .defaultAdvisors(new TokenPrintAdvisor(), new SimpleLoggerAdvisor(), new SafeGuardAdvisor(List.of("games")))
                 .defaultOptions(chatOptionsBuilder)
                 .build();
     }
